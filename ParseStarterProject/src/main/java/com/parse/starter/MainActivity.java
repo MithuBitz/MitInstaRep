@@ -14,6 +14,7 @@ import android.util.Log;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
+import com.parse.LogInCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -32,52 +33,36 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Create a user on the parse server
-        ParseUser user = new ParseUser();
-        //Set the username and password
-        user.setUsername("mithu");
-        user.setPassword("password");
-        //SignUp the user
-        user.signUpInBackground(new SignUpCallback() {
+//        //Create a user on the parse server
+//        ParseUser user = new ParseUser();
+//        //Set the username and password
+//        user.setUsername("mithu");
+//        user.setPassword("password");
+//        //SignUp the user
+//        user.signUpInBackground(new SignUpCallback() {
+//            @Override
+//            public void done(ParseException e) {
+//                if (e == null) {
+//                    //All is well
+//                    Log.i("SignUp", "All is going well");
+//                } else {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+
+
+       // Log in the user on the parse server
+        ParseUser.logInInBackground("mithu", "password", new LogInCallback() {
             @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    //All is well
-                    Log.i("SignUp", "All is going well");
+            public void done(ParseUser user, ParseException e) {
+                if (e == null && user != null) {
+                    Log.i("LogIn", "User Logged in Successfully");
                 } else {
                     e.printStackTrace();
                 }
             }
         });
-
-
-       ParseQuery<ParseObject> query = ParseQuery.getQuery("Score");
-
-       //Parse a specific data from the database
-//        query.whereEqualTo("player", "mithu");
-//        query.setLimit(1);
-        query.whereGreaterThan("score", 50);
-
-       //Parse a list of data
-       query.findInBackground(new FindCallback<ParseObject>() {
-           @Override
-           public void done(List<ParseObject> objects, ParseException e) {
-               if (e == null && objects != null){
-
-                       for (ParseObject object : objects) {
-
-                           object.put("score", object.getInt("score") + 20);
-                           object.saveInBackground();
-
-                           Log.i("Player", object.getString("player"));
-                           Log.i("score", Integer.toString(object.getInt("score")));
-                           }
-
-
-                   }
-               }
-
-       });
 
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
     }
