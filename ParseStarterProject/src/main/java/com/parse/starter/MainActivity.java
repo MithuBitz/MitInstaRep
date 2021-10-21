@@ -12,12 +12,15 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
+
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -27,41 +30,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Store the data on the parse server
-//        ParseObject tweet = new ParseObject("Tweet");
-//        tweet.put("username", "mithu");
-//        tweet.put("tweet", "My first tweet");
-//        tweet.saveInBackground(new SaveCallback() {
-//            @Override
-//            public void done(ParseException e) {
-//                if (e == null){
-//                    //Success
-//                    Log.i("Username", "Save the tweet");
-//                } else {
-//                    //Fail to parse
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
+       ParseQuery<ParseObject> query = ParseQuery.getQuery("Score");
 
-//        //Select the parse object and intialize it in query
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Tweet");
-
-        query.getInBackground("njyHI3auMB", new GetCallback<ParseObject>() {
-            @Override
-            public void done(ParseObject object, ParseException e) {
-                if (e == null && object != null) {
-
-//                    //Update the data here
-//                    object.put("score", 80);
-//                    object.saveInBackground();
-
-                    Log.i("username", object.getString("username"));
-                    Log.i("tweet", object.getString("tweet"));
-                    //Log.i("score", Integer.toString(object.getInt("score")));
-                }
-            }
-        });
+       //Parse a list of data
+       query.findInBackground(new FindCallback<ParseObject>() {
+           @Override
+           public void done(List<ParseObject> objects, ParseException e) {
+               if (e == null){
+                   if (objects.size() > 0) {
+                       for (ParseObject object : objects) {
+                           Log.i("Player", object.getString("player"));
+                           Log.i("Player", Integer.toString(object.getInt("score")));
+                       }
+                   }
+               }
+           }
+       });
 
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
     }
