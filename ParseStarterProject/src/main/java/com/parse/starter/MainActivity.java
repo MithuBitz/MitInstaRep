@@ -53,16 +53,23 @@ public class MainActivity extends AppCompatActivity {
 
 
        // Log in the user on the parse server
-        ParseUser.logInInBackground("mithu", "password", new LogInCallback() {
-            @Override
-            public void done(ParseUser user, ParseException e) {
-                if (e == null && user != null) {
-                    Log.i("LogIn", "User Logged in Successfully");
-                } else {
-                    e.printStackTrace();
-                }
-            }
-        });
+//        ParseUser.logInInBackground("mithu", "password", new LogInCallback() {
+//            @Override
+//            public void done(ParseUser user, ParseException e) {
+//                if (e == null && user != null) {
+//                    Log.i("LogIn", "User Logged in Successfully");
+//                } else {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+
+        //If the user is logged in than no need to logged in again
+        if (ParseUser.getCurrentUser() != null) {
+            Log.i("UserActive", ParseUser.getCurrentUser().getUsername());
+        } else {
+            Log.i("InActive", "OOps the user not logged in");
+        }
 
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
     }
