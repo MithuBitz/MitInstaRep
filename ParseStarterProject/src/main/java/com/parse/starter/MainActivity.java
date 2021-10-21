@@ -64,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
+        //Log out the user from the parse server
+        ParseUser.logOut();
+
         //If the user is logged in than no need to logged in again
         if (ParseUser.getCurrentUser() != null) {
             Log.i("UserActive", ParseUser.getCurrentUser().getUsername());
