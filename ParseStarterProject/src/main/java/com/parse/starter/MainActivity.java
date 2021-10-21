@@ -32,19 +32,30 @@ public class MainActivity extends AppCompatActivity {
 
        ParseQuery<ParseObject> query = ParseQuery.getQuery("Score");
 
+       //Parse a specific data from the database
+//        query.whereEqualTo("player", "mithu");
+//        query.setLimit(1);
+        query.whereGreaterThan("score", 50);
+
        //Parse a list of data
        query.findInBackground(new FindCallback<ParseObject>() {
            @Override
            public void done(List<ParseObject> objects, ParseException e) {
-               if (e == null){
-                   if (objects.size() > 0) {
+               if (e == null && objects != null){
+
                        for (ParseObject object : objects) {
+
+                           object.put("score", object.getInt("score") + 20);
+                           object.saveInBackground();
+
                            Log.i("Player", object.getString("player"));
-                           Log.i("Player", Integer.toString(object.getInt("score")));
-                       }
+                           Log.i("score", Integer.toString(object.getInt("score")));
+                           }
+
+
                    }
                }
-           }
+
        });
 
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
