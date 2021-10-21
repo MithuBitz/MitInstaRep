@@ -18,7 +18,9 @@ import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.parse.SignUpCallback;
 
 import java.util.List;
 
@@ -29,6 +31,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Create a user on the parse server
+        ParseUser user = new ParseUser();
+        //Set the username and password
+        user.setUsername("mithu");
+        user.setPassword("password");
+        //SignUp the user
+        user.signUpInBackground(new SignUpCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    //All is well
+                    Log.i("SignUp", "All is going well");
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+
 
        ParseQuery<ParseObject> query = ParseQuery.getQuery("Score");
 
