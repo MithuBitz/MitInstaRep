@@ -13,8 +13,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView loginTV;
     EditText usernameET;
     EditText passwordET;
+    ImageView logoIV;
+    RelativeLayout backgrounLayout;
 
 
     @Override
@@ -46,13 +51,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         loginTV = findViewById(R.id.logInTV);
-        loginTV.setOnClickListener(this);
-
         usernameET = findViewById(R.id.usernameET);
         passwordET = findViewById(R.id.passwordET);
+        logoIV = findViewById(R.id.logoImageView);
+        backgrounLayout = findViewById(R.id.backgroundLayout);
 
-        //set the onKey listener for password field
 
+        //set the onKey & onclick listener
+        passwordET.setOnKeyListener(this);
+        loginTV.setOnClickListener(this);
+        logoIV.setOnClickListener(this);
+        backgrounLayout.setOnClickListener(this);
 
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
     }
@@ -112,11 +121,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 loginTV.setText("or, Login");
             }
 
+        } else if (v.getId() == R.id.logoImageView || v.getId() == R.id.backgroundLayout) { //Keyboard hide when user touch outside of the keyboard
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
     }
 
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+            signUpClicked(v);
+        }
         return false;
     }
 }
